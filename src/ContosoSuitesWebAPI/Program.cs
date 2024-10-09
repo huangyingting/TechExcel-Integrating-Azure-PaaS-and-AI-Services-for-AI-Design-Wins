@@ -36,19 +36,25 @@ builder.Services.AddSingleton<CosmosClient>((_) =>
     return client;
 });
 
+
+
 builder.Services.AddSingleton<Kernel>((_) =>
 {
     IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
     kernelBuilder.AddAzureOpenAIChatCompletion(
         deploymentName: builder.Configuration["AzureOpenAI:DeploymentName"]!,
-        endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
-        apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
+        endpoint: builder.Configuration["ApiManagement:Endpoint"]!,
+        apiKey: builder.Configuration["ApiManagement:ApiKey"]!
+        // endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
+        // apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
     );
     #pragma warning disable SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     kernelBuilder.AddAzureOpenAITextEmbeddingGeneration(
         deploymentName: builder.Configuration["AzureOpenAI:EmbeddingDeploymentName"]!,
-        endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
-        apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
+        endpoint: builder.Configuration["ApiManagement:Endpoint"]!,
+        apiKey: builder.Configuration["ApiManagement:ApiKey"]!        
+        // endpoint: builder.Configuration["AzureOpenAI:Endpoint"]!,
+        // apiKey: builder.Configuration["AzureOpenAI:ApiKey"]!
     );
     #pragma warning restore SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     kernelBuilder.Plugins.AddFromType<DatabaseService>();
@@ -146,3 +152,4 @@ app.MapPost("/MaintenanceCopilotChat", async ([FromBody]string message, [FromSer
     .WithOpenApi();
 
 app.Run();
+
